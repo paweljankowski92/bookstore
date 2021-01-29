@@ -21,20 +21,30 @@
   const listContainer = document.querySelector(select.containerOf.bookList);
 
   function render () {
-
     // const thisBooksList = this;
 
-    for(let books of dataSource.books) {
+    for(let book of dataSource.books) {
+
       //generate HTML of books
-      const generatedHTML = templates.bookTemplate(books);
-      // console.log('generatedHTML', generatedHTML);
+      const ratingBgc = determineRatingBgc(book.rating);
+      const ratingWidth = book.rating * 10;
+      const generatedHTML = templates.bookTemplate({
+        id: book.id,
+        price: book.price,
+        name: book.name,
+        image: book.image,
+        rating: book.rating,
+        ratingBgc,
+        ratingWidth
+      });
+
       // create element using utils
       const element = utils.createDOMFromHTML(generatedHTML);
       console.log('element', element);
       // find list container
       // add element to list
       listContainer.appendChild(element);
-      const ratingBgc = determineRatingBgc(rating);
+
     }
   }
 
@@ -91,49 +101,49 @@
 
   }
 
-function filterBooks (){
+  function filterBooks (){
 
-  for(let hiddenBooks of dataSource.books){
-    console.log('hiddenBooks', hiddenBooks)
+    for(let hiddenBooks of dataSource.books){
+      console.log('hiddenBooks', hiddenBooks);
       let shouldBeHidden = false;
       for(let filter of filters){
-        console.log('filter', filter)
+        console.log('filter', filter);
         if(!hiddenBooks.details[filter]){
           shouldBeHidden = true;
           break;
         }
       }
 
-    const book = document.querySelector('.book__image[data-id="' + hiddenBooks.id + '"]')
-    console.log('book', book);
-    if(shouldBeHidden){
-      book.classList.add('hidden');
-    }
-    else {
-      book.classList.remove('hidden');
+      const book = document.querySelector('.book__image[data-id="' + hiddenBooks.id + '"]');
+      console.log('book', book);
+      if(shouldBeHidden){
+        book.classList.add('hidden');
+      }
+      else {
+        book.classList.remove('hidden');
+      }
     }
   }
-}
 
-function determineRatingBgc(rating){
+  function determineRatingBgc(rating){
 
-  let background = '';
+    let background = '';
 
-if(rating<6){
-  background = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);';
-}
-if(rating >6 && rating<=8){
-  background = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);';
-}
-if(rating>8 && rating<=9){
-  background = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%);';
-}
-if(rating>9){
-  background = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);';
-}
+    if(rating<6){
+      background = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);';
+    }
+    if(rating >6 && rating<=8){
+      background = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);';
+    }
+    if(rating>8 && rating<=9){
+      background = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%);';
+    }
+    if(rating>9){
+      background = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);';
+    }
 
-  return background
-}
+    return background;
+  }
 
   render();
   initActions();
